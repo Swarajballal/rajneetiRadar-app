@@ -11,6 +11,9 @@
     "db:push": "prisma db push --skip-generate"
   },
   "devDependencies": {
-    "prisma": "^5.4.1"
+    "@types/node": "^20.8.4",
+    "prisma": "^5.4.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
   }
 }

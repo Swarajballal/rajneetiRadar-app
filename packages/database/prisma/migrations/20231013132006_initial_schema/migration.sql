@@ -6,7 +6,7 @@ CREATE TYPE "ApprovalStatus" AS ENUM ('PENDING', 'APPROVED', 'REJECTED');
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "emailVerified" TIMESTAMP(3),
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -15,15 +15,13 @@ CREATE TABLE "User" (
     "role" "Role" NOT NULL DEFAULT 'USER',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "hashedPassword" TEXT,
-    "adminUsername" TEXT,
-    "adminHashedPassword" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Admin" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "username" TEXT NOT NULL,
     "role" "Role" NOT NULL DEFAULT 'ADMIN',
     "hashedPassword" TEXT NOT NULL,
@@ -35,8 +33,8 @@ CREATE TABLE "Admin" (
 
 -- CreateTable
 CREATE TABLE "Account" (
-    "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "type" TEXT NOT NULL,
     "provider" TEXT NOT NULL,
     "providerAccountId" TEXT NOT NULL,
@@ -53,9 +51,9 @@ CREATE TABLE "Account" (
 
 -- CreateTable
 CREATE TABLE "Session" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "sessionToken" TEXT NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
     "expires" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Session_pkey" PRIMARY KEY ("id")
@@ -63,8 +61,8 @@ CREATE TABLE "Session" (
 
 -- CreateTable
 CREATE TABLE "VerificationToken" (
-    "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "identifier" TEXT NOT NULL,
     "token" TEXT NOT NULL,
     "expires" TIMESTAMP(3) NOT NULL,
@@ -74,17 +72,17 @@ CREATE TABLE "VerificationToken" (
 
 -- CreateTable
 CREATE TABLE "LanguageKnown" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "language" TEXT NOT NULL,
-    "userProfileId" INTEGER NOT NULL,
+    "userProfileId" TEXT NOT NULL,
 
     CONSTRAINT "LanguageKnown_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "UserProfile" (
-    "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "bio" TEXT,
     "isPolitician" BOOLEAN,
     "approvalStatus" "ApprovalStatus" NOT NULL DEFAULT 'PENDING',
