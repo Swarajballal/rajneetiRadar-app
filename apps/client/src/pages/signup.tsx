@@ -20,7 +20,9 @@ async function handleSignup() {
 
 function SignupComponent() {
   return (
-    <div>
+    <div 
+    className="flex flex-col items-center justify-center h-screen bg-red-700"
+    >
       <Signup />
       <button onClick={handleSignup}>Sign Up</button>
     </div>
