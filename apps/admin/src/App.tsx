@@ -1,10 +1,7 @@
 
 import './App.css'
 import { Signup } from "ui";
-import { PrismaClient } from 'database';
-
 function App() {
-  
 
   return (
     <>
