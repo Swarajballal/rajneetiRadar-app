@@ -8,7 +8,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // Perform database operations here using prisma
     const newUser = await prisma.user.create({
       data: {
-        email: "swara8@gmail.com",
+        email: "wrwerwe@gmail.com",
         firstName: "swaraj",
         lastName: "ballal",
       },

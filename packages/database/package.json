@@ -8,10 +8,13 @@
   },
   "scripts": {
     "db:generate": "prisma generate",
-    "db:push": "prisma db push --skip-generate"
+    "db:migrate": "dotenv -e ../../.env prisma migrate dev --name initial_schema init",
+    "db:push": "prisma db push --skip-generate",
+    "db:studio": "dotenv -e ../../.env -- npx prisma studio"
   },
   "devDependencies": {
     "@types/node": "^20.8.4",
+    "dotenv-cli": "^7.3.0",
     "prisma": "^5.4.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
