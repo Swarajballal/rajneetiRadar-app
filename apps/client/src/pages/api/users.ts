@@ -1,14 +1,13 @@
-import { PrismaClient } from "database";
+import { prismadb } from "database";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const prisma = new PrismaClient();
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     // Perform database operations here using prisma
-    const newUser = await prisma.user.create({
+    const newUser = await prismadb.user.create({
       data: {
-        email: "swarajrballal@gmail.com",
+        email: "mewdfswdf@gmail.com",
         firstName: "swaraj",
         lastName: "ballal",
       },
@@ -19,6 +18,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
   } finally {
-    await prisma.$disconnect();
+    await prismadb.$disconnect();
   }
 };
