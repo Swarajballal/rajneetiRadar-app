@@ -1,7 +1,7 @@
-import { prismadb } from "database";
+import { PrismaClient } from "database";
 import { NextApiRequest, NextApiResponse } from "next";
 
-
+const prismadb = new PrismaClient();
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     // Perform database operations here using prisma
