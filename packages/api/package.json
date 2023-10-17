@@ -1,0 +1,24 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@trpc/client": "^10.40.0",
+    "@trpc/server": "^10.40.0",
+    "zod": "^3.22.4",
+    "database": "*"
+  },
+  "devDependencies": {
+    "eslint-config-custom": "*",
+    "tsconfig": "*",
+    "eslint": "^8.34.0",
+    "typescript": "^5.0.2"
+  }
+}

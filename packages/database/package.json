@@ -7,10 +7,11 @@
     "@prisma/client": "^5.4.2"
   },
   "scripts": {
+    "clean": "rm -rf .turbo node_modules",
     "db:generate": "prisma generate",
     "db:migrate": "dotenv -e ../../.env prisma migrate dev --name initial_schema init",
     "db:push": "prisma db push --skip-generate",
-    "db:studio": "dotenv -e ../../.env -- npx prisma studio"
+    "dev": "dotenv -e ../../.env -- npx prisma studio"
   },
   "devDependencies": {
     "@types/node": "^20.8.4",
