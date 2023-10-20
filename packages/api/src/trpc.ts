@@ -6,11 +6,13 @@
  * tl;dr - this is where all the tRPC server stuff is created and plugged in.
  * The pieces you will need to use are documented accordingly near the end
  */
-import { initTRPC, TRPCError } from "@trpc/server";
-import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
+import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
+export { enforceUserIsAuthed } from "./middlewares/enforceUserIsAuthed";
+export { publicProcedure } from "./procedures/publicProcedure";
+export { protectedProcedure } from "./procedures/protectedProcedure";
+export { createTRPCRouter } from "./router/mainRouter";
 import { ZodError } from "zod";
-
 import { auth } from "auth";
 import type { Session } from "auth";
 import { prisma as db } from "database";
@@ -64,3 +66,24 @@ export const createTRPCContext = async (opts: {
     session,
   });
 };
+/**
+ * 2. INITIALIZATION
+ *
+ * This is where the trpc api is initialized, connecting the context and
+ * transformer
+ */
+
+export const t = initTRPC.context<typeof createTRPCContext>().create({
+  transformer: superjson,
+  errorFormatter({ shape, error }) {
+    return {
+      ...shape,
+      data: {
+        ...shape.data,
+        zodError:
+          error.cause instanceof ZodError ? error.cause.flatten() : null,
+      },
+    };
+  },
+});
+
