@@ -15,8 +15,7 @@
     "auth": "*",
     "bcrypt": "^5.1.1",
     "database": "*",
-    "superjson": "^2.0.0",
-    "zod": "^3.22.4"
+    "superjson": "^2.0.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.1",

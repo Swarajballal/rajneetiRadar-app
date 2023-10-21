@@ -1,16 +1,12 @@
-import { createTRPCRouter, enforceUserIsAuthed, publicProcedure } from "../trpc";
+import { TRPCError } from "@trpc/server";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import bcrypt from 'bcrypt';
-import { z } from "zod";
+import { UserInput } from '../../../common'
 
 export const userRouter = createTRPCRouter({
 
     signup: publicProcedure
-        .input(z.object({
-            email: z.string().email(),
-            hashedPassword: z.string(),
-            firstName: z.string().nullable(),
-            lastName: z.string().nullable(),
-        }))
+        .input(UserInput)
         .mutation(async (opts) => {
             const { input} = opts;
             const userExists = await opts.ctx.db.user.findUnique({
@@ -22,8 +18,14 @@ export const userRouter = createTRPCRouter({
                 return { status: 'error', message: 'User already exists' };
             }else {
 
+                if (input.hashedPassword === null) {
+                    throw new TRPCError({
+                        code: 'BAD_REQUEST',
+                        message: 'Password cannot be null',
+                    });
+                }
                 const hashedPassword = await bcrypt.hash(input.hashedPassword, 10);
-                const user = await opts.ctx.db.user.create({
+                await opts.ctx.db.user.create({
                     data: {
                         email: input.email,
                         hashedPassword: hashedPassword,
@@ -40,10 +42,7 @@ export const userRouter = createTRPCRouter({
         }),
 
     login: publicProcedure
-        .input(z.object({
-            email: z.string().email(),
-            hashedPassword: z.string(),
-        }))
+        .input(UserInput.omit({ firstName: true, lastName: true }))
         .mutation(async (opts) => {
             const { input } = opts;
             const userExists = await opts.ctx.db.user.findUnique({
@@ -54,6 +53,12 @@ export const userRouter = createTRPCRouter({
             if (!userExists || !userExists.hashedPassword) {
                 return { status : 'error', message: 'Invalid email or password' };
             }else {
+                if (input.hashedPassword === null) {
+                    throw new TRPCError({
+                        code: 'BAD_REQUEST',
+                        message: 'Password cannot be null',
+                    });
+                }
                 const passwordMatch = await bcrypt.compare(input.hashedPassword, userExists.hashedPassword);
                 if(!passwordMatch) {
                     return { status: 'error', message: 'Invalid email or password' };
@@ -61,6 +66,23 @@ export const userRouter = createTRPCRouter({
                     return { status: 'success', message: 'User logged in successfully' };
                 }
             }
-        })   
+        }),
+        
+    me: protectedProcedure
+        .output(UserInput.omit({ hashedPassword: true, lastName: true, firstName: true }))
+        .query(async (opts) => {
+            let response = await opts.ctx.db.user.findUnique({
+                where: {
+                    id: opts.ctx.session?.user.id,
+                }
+            });
+            if (!response) {
+                throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' });
+            }
+            return {
+                email: response.email || "",
+           }
+        }),
+        
 
 })
